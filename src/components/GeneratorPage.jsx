@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import Frequencies from './Frequencies';
+import Input from './Input';
 
 export default function GeneratorPage({ values, setValues }) {
   const [minimum, setMinimum] = useState(0);
@@ -9,45 +11,26 @@ export default function GeneratorPage({ values, setValues }) {
       <h1 className='p-2 text-center'>Generate numbers</h1>
       <div className='row d-flex align-items-center'>
         <div className='col-3'>
-          <div className="form-group">
-            <label className="col-form-label">Min</label>
-            <input
-              className='form-control'
-              required
-              onChange={e => {
-                setMinimum(e.currentTarget.value);
-              }}
-              value={minimum}
-            />
-          </div>
 
+          <Input
+            label='Min'
+            value={minimum}
+            onChange={setMinimum}
+          />
         </div>
         <div className='col-3'>
-          <div className="form-group">
-            <label className="col-form-label">Max</label>
-            <input
-              className='form-control'
-              required
-              onChange={e => {
-                setMaximum(e.currentTarget.value);
-              }}
-              value={maximum}
-            />
-          </div>
+          <Input
+            label='Max'
+            value={maximum}
+            onChange={setMaximum}
+          />
         </div>
         <div className='col-3'>
-          <div className="form-group">
-            <label className="col-form-label">Total elements</label>
-            <input
-              className='form-control'
-              required
-              min='1'
-              onChange={e => {
-                setTotal(Math.max(1, Number(e.currentTarget.value)));
-              }}
-              value={total}
-            />
-          </div>
+          <Input
+            label='Total numbers'
+            value={total}
+            onChange={setTotal}
+          />
         </div>
         <div className='col-3'>
           <button className='btn btn-primary' onClick={() => {
@@ -58,12 +41,18 @@ export default function GeneratorPage({ values, setValues }) {
               const randomNumber = Math.random() * (maxN - minN) + minN;
               numbers.push(Math.floor(randomNumber));
             }
-            setValues(numbers);
+            setValues(numbers.slice().sort((a, b) => a - b));
           }}>Generate</button>
         </div>
       </div>
       <div className='mt-2'>
-
+        {
+          values.length > 0 && (
+            <Frequencies
+              values={values}
+            />
+          )
+        }
       </div>
     </div>
   )
