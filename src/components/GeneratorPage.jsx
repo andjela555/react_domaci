@@ -41,7 +41,7 @@ export default function GeneratorPage({ values, setValues }) {
               const randomNumber = Math.random() * (maxN - minN) + minN;
               numbers.push(Math.floor(randomNumber));
             }
-            setValues(numbers.slice().sort((a, b) => a - b));
+            setValues(numbers);
           }}>Generate</button>
         </div>
       </div>
@@ -49,7 +49,7 @@ export default function GeneratorPage({ values, setValues }) {
         {
           values.length > 0 && (
             <Frequencies
-              values={values}
+              values={values.slice().sort((a, b) => a - b)}
             />
           )
         }

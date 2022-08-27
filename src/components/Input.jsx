@@ -9,7 +9,7 @@ export default function Input({ label, value, onChange, readOnly }) {
         className='form-control'
         required
         onChange={e => {
-          if (onChange) {
+          if (onChange && !readOnly) {
             onChange(e.currentTarget.value);
           }
         }}

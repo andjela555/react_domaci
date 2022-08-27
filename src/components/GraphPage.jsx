@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import Input from './Input';
 import Point from './Point';
+import XAsis from './XAsis';
+import YAxis from './YAxis';
 
 export default function GraphPage({ values }) {
 
   const [totalSlice, setTotalSlice] = useState(values.length);
   const [simulate, setSimulate] = useState(false);
-
-  useEffect(() => {
-    if (!simulate) {
-      return;
-    }
-    setTotalSlice(1);
-  }, [simulate]);
-
+  const [speed, setSpeed] = useState(150)
   useEffect(() => {
     if (!simulate) {
       return;
@@ -24,15 +19,15 @@ export default function GraphPage({ values }) {
     }
     const timeout = setTimeout(() => {
       setTotalSlice(p => p + 1);
-    }, 50)
+    }, speed)
 
     return timeout.unref;
-  }, [simulate, totalSlice])
+  }, [simulate, totalSlice, speed])
 
   if (values.length === 0) {
     return null
   }
-  const sliced = values.slice(0, simulate ? totalSlice : values.length);
+  const sliced = values.slice(0, simulate ? totalSlice : values.length).sort((a, b) => a - b);
 
   const total = sliced.reduce((acc, val) => acc + val, 0);
   const mean = total / sliced.length
@@ -74,18 +69,30 @@ export default function GraphPage({ values }) {
           />
         </div>
       </div>
-      <div className='p-2'>
-        <button className='btn btn-success'
-          onClick={() => {
-            setSimulate(true);
-          }}
-        >Simulate point population</button>
+      <div className='row p-2 d-flex align-items-center'>
+        <div className='col-4'>
+          <Input
+            label='Timeout'
+            readOnly={simulate}
+            onChange={setSpeed}
+            value={speed}
+          />
+        </div>
+        <div className='col-4'>
+          <button className='btn btn-success'
+            onClick={() => {
+              setSimulate(p => !p);
+              setTotalSlice(1);
+            }}
+          >{simulate ? 'Stop' : 'Start'} point population</button>
+        </div>
       </div>
-      <div className='p-2'>
-        <div className='border graph'>
-          <div className='xAsis'></div>
+      <div className='pt-5'>
+        <div className='border graph '>
+          <XAsis min={minNumber} max={maxNumber} />
+          <YAxis max={maxFrequency} />
           {
-            sliced.map(value => {
+            values.slice(0, simulate ? totalSlice : values.length).map(value => {
               return (
                 <Point
                   x={(value - minNumber) / (maxNumber - minNumber)}
