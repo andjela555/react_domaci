@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import GeneratorPage from './components/GeneratorPage';
 import { useState } from 'react';
+import GraphPage from './components/GraphPage';
 
 function App() {
   const [values, setValues] = useState([]);
@@ -12,6 +13,7 @@ function App() {
       <Navbar />
 
       <Routes>
+        <Route path='/graph' element={<GraphPage values={values} />} />
         <Route path='/'
           element={<GeneratorPage
             values={values}
